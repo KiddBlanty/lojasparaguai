@@ -1,5 +1,6 @@
 const express = require("express")
 const cors = require("cors")
+const path = require("path")
 
 const app = express()
 const port = process.env.Port || 3000
@@ -7,10 +8,16 @@ const port = process.env.Port || 3000
 // Mis Importaciones
 const CategoriaModel = require("./model/CategoriaModel.class")
 const TiendaModel = require("./model/TiendaModel.class")
+const { response } = require("express")
 // -----------------
 
-app.use(cors())
+app.use(cors({origin: "*"}))
 app.use(express.json())
+app.use("/", express.static(path.join(__dirname, "public")))
+
+app.get("/", (request, response)=>{
+    response.sendFile("index.html")
+})
 
 app.get("/ubicateya/api/categoria", async (request, response)=>{
     const data = await CategoriaModel.getCategoria()
