@@ -12,11 +12,11 @@ class UsuarioModel {
             return null
         }
     }
-    static async setUsuario(nombre,email,clave){
+    static async setUsuario({nombre,email,clave}){
             try {
                 const sql = "insert into usuario (nombre, email,clave)values(?,?,?)"
                 const conexion = await Conexion.getConexion();
-                const data = await conexion.query(sql, [nombre,email.clave]);
+                const data = await conexion.query(sql, [nombre,email,clave]);
                 return data;
             } catch (error) {
                 console.log(error)
