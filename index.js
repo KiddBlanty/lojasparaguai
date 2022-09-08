@@ -45,33 +45,31 @@ app.get("/api/tiendas/:id_categoria", async (request, response)=> {
 
     response.json(data)
 })
-app.post("/api/usuario/login", async (request, response)=> {
+app.post("/api/usuario/login", async (request, response) => {
     const usuario = request.body
-    
-    
+
     const data = await UsuarioModel.getUsuario(usuario)
 
-    if (!data) return response.json({error: "Ocurrio un error"})
+    if (!data) return response.status(500).json({ error: "Ocurrio un error" })
 
     response.json(data)
 })
 
-app.post("/api/usuario/registro", async (request, response)=> {
+app.post("/api/usuario/registro", async (request, response) => {
     const usuario = request.body
 
-    const verificarUsuario= await UsuarioModel.getUsuarioEmail(usuario)
+    const verificarUsuario = await UsuarioModel.getUsuarioEmail(usuario)
 
-    if(!verificarUsuario) return response.status(500).json({error: "Ocurrio un error"})
-    if(verificarUsuario.length > 0) return response.status(202).json({error: "El email ya Existe"})
-    
-    
+    if (!verificarUsuario) return response.status(500).json({ error: "Ocurrio un error" })
+
+    if (verificarUsuario.length > 0) return response.status(202).json({ error: "El email ya existe" })
+
     const data = await UsuarioModel.setUsuario(usuario)
 
-    if (!data) return response.status(500).json({error: "Ocurrio un error"})
+    if (!data) return response.status(500).json({ error: "Ocurrio un error" })
 
     response.status(201).json(data)
 })
-
 
 
 app.listen(port, ()=>{
