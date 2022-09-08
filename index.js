@@ -59,10 +59,10 @@ app.post("/api/usuario/login", async (request, response)=> {
 app.post("/api/usuario/registro", async (request, response)=> {
     const usuario = request.body
 
-    const verificarUsuario= await UsuarioModel.getUsuario(usuario)
+    const verificarUsuario= await UsuarioModel.getUsuarioEmail(usuario)
 
     if(!verificarUsuario) return response.status(500).json({error: "Ocurrio un error"})
-    if(verificarUsuario.length > 0) return response.status(202).json({error: "El mail ya Existe"})
+    if(verificarUsuario.length > 0) return response.status(202).json({error: "El email ya Existe"})
     
     
     const data = await UsuarioModel.setUsuario(usuario)

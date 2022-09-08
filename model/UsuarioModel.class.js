@@ -23,7 +23,7 @@ class UsuarioModel {
                 return null
             }
         }
-        static async getUsuario(email){
+        static async getUsuarioEmail(email){
             try {
                 const sql = "select * from usuario where email=?"
                 const conexion = await Conexion.getConexion();
