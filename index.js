@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000
 const CategoriaModel = require("./model/CategoriaModel.class")
 const TiendaModel = require("./model/TiendaModel.class")
 const { response } = require("express")
+const UsuarioModel = require("./model/UsuarioModel.class")
 // -----------------
 
 app.use(cors({origin: "*"}))
@@ -19,7 +20,7 @@ app.get("/", (request, response)=>{
     response.sendFile("index.html")
 })
 
-app.get("/ubicateya/api/categoria", async (request, response)=>{
+app.get("/api/categoria", async (request, response)=>{
     const data = await CategoriaModel.getCategoria()
 
     if (!data) return response.json({error: "Ocurrio un error"})
@@ -27,7 +28,7 @@ app.get("/ubicateya/api/categoria", async (request, response)=>{
     response.json(data)
 })
 
-app.get("/ubicateya/api/tiendas", async (request, response)=> {
+app.get("/api/tiendas", async (request, response)=> {
     const data = await TiendaModel.getTiendas()
 
     if (!data) return response.json({error: "Ocurrio un error"})
@@ -35,7 +36,7 @@ app.get("/ubicateya/api/tiendas", async (request, response)=> {
     response.json(data)
 })
 
-app.get("/ubicateya/api/tiendas/:id_categoria", async (request, response)=> {
+app.get("/api/tiendas/:id_categoria", async (request, response)=> {
     const {id_categoria} = request.params
     
     const data = await TiendaModel.getTiendasCategoria(id_categoria)
@@ -44,6 +45,34 @@ app.get("/ubicateya/api/tiendas/:id_categoria", async (request, response)=> {
 
     response.json(data)
 })
+app.post("/api/usuario/login", async (request, response)=> {
+    const usuario = request.body
+    
+    
+    const data = await UsuarioModel.getUsuario(usuario)
+
+    if (!data) return response.json({error: "Ocurrio un error"})
+
+    response.json(data)
+})
+
+app.post("/api/usuario/registro", async (request, response)=> {
+    const usuario = request.body
+
+    const verificarUsuario= await UsuarioModel.getUsuario(usuario)
+
+    if(!verificarUsuario) return response.status(500).json({error: "Ocurrio un error"})
+    if(verificarUsuario.length > 0) return response.status(202).json({error: "El mail ya Existe"})
+    
+    
+    const data = await UsuarioModel.setUsuario(usuario)
+
+    if (!data) return response.status(500).json({error: "Ocurrio un error"})
+
+    response.status(201).json(data)
+})
+
+
 
 app.listen(port, ()=>{
     console.log("Servidor arrancado en el puerto: " + port)
