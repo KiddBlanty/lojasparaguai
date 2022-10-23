@@ -10,6 +10,7 @@ const CategoriaModel = require("./model/CategoriaModel.class")
 const TiendaModel = require("./model/TiendaModel.class")
 const { response } = require("express")
 const UsuarioModel = require("./model/UsuarioModel.class")
+const ValoracionModel= require("./model/ValoracionModel.class")
 // -----------------
 
 app.use(cors({origin: "*"}))
@@ -69,6 +70,14 @@ app.post("/api/usuario/registro", async (request, response) => {
     if (!data) return response.status(500).json({ error: "Ocurrio un error" })
 
     response.status(201).json(data)
+})
+app.get("/api/valoracion/id_tienda", async (request, response)=>{
+    const id_tienda = Number(request.params.id_tienda) 
+    const data = await ValoracionModel.getValoracion(id_tienda)
+    if (!data) return response.status(500).json({ error: "Ocurrio un error" })
+    response.json({
+        calificacion:data[0].calificacion
+    })
 })
 
 
